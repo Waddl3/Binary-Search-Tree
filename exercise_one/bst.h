@@ -21,7 +21,7 @@ public: 											// public types
 	}; 	
 
 	bool empty() const {							// is the tree empty?
-		size() == 0;
+		return size() == 0;
 	}
 
     Iterator find(const K& k) {
