@@ -14,55 +14,70 @@ template<typename K, typename V>
 class PopMap {
 private:
     SearchTree<Entry<K, V>> st;
-
    
 
 public:
     // constructor accepts file name and construct search tree
     PopMap(const std::string& filename) {
         std::ifstream file(filename);
-        if(file.is_open()) {
+        if(file.is_open()){
             std::string line;
             while(std::getline(file, line)) {
-                std::istringstream iss(line);
-                int countyCode;
-                std::string _population, _county;
+                std::stringstream ss(line);
+                std::string countyCode, value;
+                
+                //Read the first field as an integer
+                if(std::getline(ss, countyCode, ',')) { 
+                    int key = std::stoi(countyCode);
 
-                if(std::getline(iss, _population, ',')) {
-                    if(std::getline(iss, _county, ',')) {
-                        countyCode = std::stoi(_population);
-                        st.insert(countyCode, _county + ", " + _pop);
+                    // Read the rest of the line
+                    if(std::getline(ss, value)) {
+
+                        //store it into the BST
+                        st.insert(key, value);
                     }
                 }
             }
-
-            file.close();
         }
         else {
-            std::cout << "Could not open" << std::endl;
+            std::cout << "NOT OPEN." << std::endl;
         }
     }
 
     // print appropriate message and data if found/not found
-    void find(int code) const {
-        auto iter = st.find(code);
-        if(!(iter == st.end())){
-            std::cout << "Found: " << (*iter).key() << " " << (*iter).value() << std::endl;
+    void find(int code) {
+        auto p = st.find(code);
+        if(p == st.end()){
+            std::cout << "Not Found " << code << std::endl;
         }
         else {
-            std::cout << "Not Found" << std::endl;
+            std::cout << "Found " << (*p).key() << std::endl;
         }
     }
 
     // print appropriate message and insert node if not found
     // replace data if found
     void insert(int code, std::string popCounty) {
-        st.insert(code, popCounty);
+        auto p = st.find(code);
+        if(p == st.end()) {
+            std::cout << "New Entry: " << code << " - " << popCounty << std::endl;
+            st.insert(code, popCounty);
+        }
+        else {
+            st.insert(code, popCounty);
+        }
     }
 
     // print appropriate message and erase node if found
     void erase(int code) {
-        st.erase(code);
+        auto p = st.find(code);
+        if(!(p == st.end())) {
+            std::cout << "Found & Erased: " << code << std::endl;
+            st.erase(code);
+        }
+        else {
+            std::cout << "Not Found" << std::endl;
+        }
     }
 
     // print one record per line using an in-order traversal
