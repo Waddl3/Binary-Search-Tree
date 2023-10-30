@@ -62,13 +62,22 @@ public: 											// public types
     TPos finder(const K& k, TPos v){
 		//TPos finder(const K & k, TPos & v) {
 			if (v.isExternal()) return v;			// key not found
+
+		//modified by Jesus Rodriguez-Luna Notes
+
+		//If key is less than the value node in v, then go to left subtree
 		if (k < (*v).key()) 
 			return finder(k, v.left());				// search left subtree
-		else if ((*v).key() < k) 
+
+		//if key is greater than the value node in v, then go right subtree
+		else if (k > (*v).key()) 
 			return finder(k, v.right());			// search right subtree
+
+		//else its found at current node
 		else 
 			return v;								// found it here
 	  }
+	  
 	/* this version alows duplicates
     TPos inserter(const K& k, const V& x) {
 		TPos v = finder(k, root());					// search from virtual root
