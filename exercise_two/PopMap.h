@@ -7,8 +7,6 @@
 #include <sstream>
 #include <iostream>
 #include <string>
-#include <vector>
-#include <exception>
 
 template<typename K, typename V>
 class PopMap {
